@@ -12,6 +12,7 @@ import pandas as pd
 from sqlalchemy.orm import Session
 from wrlc_azure_storage_service import StorageService  # type: ignore
 
+import alma_item_checks_notification_service.config as config
 from alma_item_checks_notification_service.config import (
     ACS_STORAGE_CONNECTION_STRING,
     ACS_SENDER_CONTAINER_NAME,
@@ -68,7 +69,7 @@ class NotificationService:
             return
 
         report: dict[str, Any] | list | None = self.storage_service.download_blob_as_json(
-            container_name=process.container,
+            container_name=getattr(config, str(process.container)),
             blob_name=report_id + ".json",
         )
 

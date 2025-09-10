@@ -1,0 +1,31 @@
+variable "tf_shared_resource_group_name" {
+  type = string
+}
+
+variable "tf_shared_storage_account_name" {
+  type = string
+}
+
+variable "tf_shared_container_name" {
+  type = string
+}
+
+variable "tf_shared_key" {
+  type = string
+}
+
+variable "acs_email_sender_sa_name" {
+  type = string
+}
+
+variable "acs_email_sender_sa_rg_name" {
+  type = string
+}
+
+variable "mysql_admin_username" {
+  type = string
+}
+
+variable "mysql_admin_password" {
+  type = string
+}

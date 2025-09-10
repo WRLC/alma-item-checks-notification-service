@@ -9,5 +9,5 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String, unique=True, nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
     institution_id = Column(Integer, unique=True, nullable=False)
