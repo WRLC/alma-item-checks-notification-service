@@ -85,6 +85,13 @@ data "azurerm_log_analytics_workspace" "existing" {
   resource_group_name = data.terraform_remote_state.shared.outputs.log_analytics_workspace_resource_group_name
 }
 
+output "debug_acs_storage" {
+  value = {
+    name = var.acs_email_sender_sa_name
+    rg   = var.acs_email_sender_sa_rg_name
+  }
+}
+
 data "azurerm_storage_account" "acs_email_sender" {
   name                = var.acs_email_sender_sa_name
   resource_group_name = var.acs_email_sender_sa_rg_name
