@@ -13,12 +13,16 @@ env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_USE_OIDC: true
-  TF_VAR_tf_shared_resource_group_name: ${{ secrets.TF_STATE_RESOURCE_GROUP_NAME }}
-  TF_VAR_tf_shared_storage_account_name: ${{ secrets.TF_STATE_STORAGE_ACCOUNT_NAME }}
-  TF_VAR_tf_shared_container_name: ${{ secrets.TF_STATE_CONTAINER_NAME }}
-  TF_VAR_tf_shared_key: ${{ secrets.TF_STATE_KEY }}
+  TF_VAR_tf_shared_resource_group_name: ${{ secrets.TF_SHARED_STATE_RESOURCE_GROUP_NAME }}
+  TF_VAR_tf_shared_storage_account_name: ${{ secrets.TF_SHARED_STATE_STORAGE_ACCOUNT_NAME }}
+  TF_VAR_tf_shared_container_name: ${{ secrets.TF_SHARED_STATE_CONTAINER_NAME }}
+  TF_VAR_tf_shared_key: ${{ secrets.TF_SHARED_STATE_KEY }}
+  TF_VAR_acs_email_sender_sa_name: ${{ secrets.ACS_EMAIL_SENDER_SA_NAME }}
+  TF_VAR_acs_email_sender_sa_rg_name: ${{ secrets.ACS_EMAIL_SENDER_SA_RG_NAME }}
   TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USERNAME }}
   TF_VAR_mysql_admin_password: ${{ secrets.MYSQL_ADMIN_PASSWORD }}
+  TF_WORKING_DIR: ./terraform
+  PYTHON_VERSION: '3.12'
 
 jobs:
   promote-to-production:
@@ -32,7 +36,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Poetry
       uses: snok/install-poetry@v1
@@ -54,7 +58,7 @@ jobs:
         terraform_wrapper: false
 
     - name: Get Terraform outputs
-      working-directory: terraform
+      working-directory: ${{ env.TF_WORKING_DIR }}
       run: |
         terraform init \
           -backend-config="resource_group_name=${{ secrets.TF_STATE_RG }}" \
