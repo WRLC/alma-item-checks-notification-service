@@ -5,6 +5,7 @@ import logging
 import pathlib
 from typing import Any
 
+from acs_email_sender_message_model import EmailMessage  # type: ignore
 import azure.functions as func
 from jinja2 import Environment, FileSystemLoader, select_autoescape, Template, TemplateNotFound
 import pandas as pd
@@ -16,7 +17,6 @@ from alma_item_checks_notification_service.config import (
     ACS_SENDER_CONTAINER_NAME,
     ACS_SENDER_QUEUE_NAME
 )
-from alma_item_checks_notification_service.models.email_message import EmailMessage
 from alma_item_checks_notification_service.models.process import Process
 from alma_item_checks_notification_service.services.process_service import ProcessService
 from alma_item_checks_notification_service.services.user_process_service import UserProcessService

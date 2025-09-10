@@ -16,10 +16,10 @@ dependencies = [
     "wrlc-azure-storage-service (>=0.1.1,<0.2.0)",
     "alembic (>=1.16.4,<2.0.0)",
     "PyMySQL (>=1.1.0,<2.0.0)",
-    "pydantic (>=2.11.7,<3.0.0)",
     "jinja2 (>=3.1.6,<4.0.0)",
     "pandas (>=2.3.2,<3.0.0)",
     "pandas-stubs (>=2.3.2.250827,<3.0.0.0)",
+    "acs-email-sender-message-model (>=0.1.0,<0.2.0)",
 ]
 
 [tool.poetry.group.dev.dependencies]
