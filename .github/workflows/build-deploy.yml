@@ -63,6 +63,11 @@ jobs:
         with:
           terraform_wrapper: false
 
+      - name: Debug variables
+        run: |
+          echo "acs_email_sender_sa_name:${{ env.TF_VAR_acs_email_sender_sa_name }}"
+          echo "acs_email_sender_sa_rg_name: ${{ env.TF_VAR_acs_email_sender_sa_rg_name }}"
+
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: |
