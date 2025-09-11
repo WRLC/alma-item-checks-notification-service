@@ -1,4 +1,5 @@
 """Alembic environment configuration"""
+
 import json
 import os
 from logging.config import fileConfig
@@ -20,6 +21,7 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 from alma_item_checks_notification_service.models import Base
+
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -32,10 +34,10 @@ def get_connection_string():
     """Get database connection string from environment or local.settings.json"""
     # First, try to get from environment variable
     connection_string = os.getenv("SQLALCHEMY_CONNECTION_STRING")
-    
+
     if connection_string:
         return connection_string
-    
+
     # Fallback to local.settings.json
     try:
         with open("local.settings.json") as f:
@@ -82,12 +84,12 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(config.get_section(config.config_ini_section, {}), poolclass=pool.NullPool)
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section, {}), poolclass=pool.NullPool
+    )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

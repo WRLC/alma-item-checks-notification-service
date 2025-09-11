@@ -1,4 +1,5 @@
 """Service class for Processes"""
+
 from sqlalchemy.orm import Session
 
 from alma_item_checks_notification_service.models.process import Process
@@ -7,6 +8,7 @@ from alma_item_checks_notification_service.repos.process_repo import ProcessRepo
 
 class ProcessService:
     """Service class for Processes"""
+
     def __init__(self, session: Session):
         self.process_repo = ProcessRepository(session)
 

@@ -1,4 +1,5 @@
 """Repository for the user_process table"""
+
 import logging
 
 from sqlalchemy import Select
@@ -10,6 +11,7 @@ from alma_item_checks_notification_service.models.process import Process
 
 class ProcessRepository:
     """Repository for the process table"""
+
     def __init__(self, session: Session):
         self.session = session
 
@@ -28,15 +30,21 @@ class ProcessRepository:
             process: Process | None = self.session.execute(stmt).scalars().first()
 
             if not process:
-                logging.error(f"ProcessRepository::get_process_by_name: {process_name} not found")
+                logging.error(
+                    f"ProcessRepository::get_process_by_name: {process_name} not found"
+                )
 
             return process
 
         except NoResultFound:
-            logging.error(f"ProcessRepository.get_process_id_by_name: No process found with name '{process_name}'")
+            logging.error(
+                f"ProcessRepository.get_process_id_by_name: No process found with name '{process_name}'"
+            )
             return None
         except SQLAlchemyError as e:
-            logging.error(f"ProcessRepository.get_process_id_by_name: SQLAlchemyError: {e}")
+            logging.error(
+                f"ProcessRepository.get_process_id_by_name: SQLAlchemyError: {e}"
+            )
             return None
         except Exception as e:
             logging.error(f"ProcessRepository.get_process_id_by_name: Exception: {e}")
@@ -57,16 +65,22 @@ class ProcessRepository:
             process: Process | None = self.session.execute(stmt).scalars().first()
 
             if not process:
-                logging.error(f"ProcessRepository.get_process_id_by_name: Process '{name}' not found")
+                logging.error(
+                    f"ProcessRepository.get_process_id_by_name: Process '{name}' not found"
+                )
                 return None
 
             return int(process.id)
 
         except NoResultFound:
-            logging.error(f"ProcessRepository.get_process_id_by_name: No process found with name '{name}'")
+            logging.error(
+                f"ProcessRepository.get_process_id_by_name: No process found with name '{name}'"
+            )
             return None
         except SQLAlchemyError as e:
-            logging.error(f"ProcessRepository.get_process_id_by_name: SQLAlchemyError: {e}")
+            logging.error(
+                f"ProcessRepository.get_process_id_by_name: SQLAlchemyError: {e}"
+            )
             return None
         except Exception as e:
             logging.error(f"ProcessRepository.get_process_id_by_name: Exception: {e}")
