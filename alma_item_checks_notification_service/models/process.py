@@ -1,4 +1,5 @@
 """Process model"""
+
 from sqlalchemy import Column, Integer, String
 
 from alma_item_checks_notification_service.models.base import Base
@@ -6,6 +7,7 @@ from alma_item_checks_notification_service.models.base import Base
 
 class Process(Base):
     """Process model"""
+
     __tablename__ = "process"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

@@ -1,4 +1,5 @@
 """Service class for Users"""
+
 from sqlalchemy.orm import Session
 
 from alma_item_checks_notification_service.repos.user_repo import UserRepository
@@ -6,6 +7,7 @@ from alma_item_checks_notification_service.repos.user_repo import UserRepository
 
 class UserService:
     """Service class for Users"""
+
     def __init__(self, session: Session):
         self.user_repo = UserRepository(session)
 

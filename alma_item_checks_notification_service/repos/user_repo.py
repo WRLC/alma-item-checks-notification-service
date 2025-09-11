@@ -1,4 +1,5 @@
 """Repository for the User table"""
+
 import logging
 
 from sqlalchemy import Select, and_
@@ -10,10 +11,13 @@ from alma_item_checks_notification_service.models.user import User
 
 class UserRepository:
     """Repository for the User table"""
+
     def __init__(self, session: Session):
         self.session = session
 
-    def get_user_email(self, user_id: int, institution_id: int | None = None) -> str | None:
+    def get_user_email(
+        self, user_id: int, institution_id: int | None = None
+    ) -> str | None:
         """Get user email address from user id
 
         Args:
@@ -26,7 +30,9 @@ class UserRepository:
         stmt: Select
 
         if institution_id is not None:
-            stmt = Select(User).where(and_(User.id == user_id, User.institution_id == institution_id))
+            stmt = Select(User).where(
+                and_(User.id == user_id, User.institution_id == institution_id)
+            )
         else:
             stmt = Select(User).where(User.id == user_id)
 

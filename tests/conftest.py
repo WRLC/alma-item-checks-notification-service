@@ -1,13 +1,13 @@
 """Pytest configuration and fixtures"""
+
 import json
-import os
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, MagicMock
+from unittest.mock import Mock
 
 import pytest
 from sqlalchemy import create_engine, StaticPool
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 
 from alma_item_checks_notification_service.models.base import Base
 from alma_item_checks_notification_service.models.user import User
@@ -22,7 +22,7 @@ def db_engine():
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
-        echo=False
+        echo=False,
     )
     Base.metadata.create_all(engine)
     return engine
@@ -40,11 +40,7 @@ def db_session(db_engine):
 @pytest.fixture(scope="function")
 def sample_user(db_session):
     """Create sample user for testing"""
-    user = User(
-        id=1,
-        email="test@example.com",
-        institution_id=123
-    )
+    user = User(id=1, email="test@example.com", institution_id=123)
     db_session.add(user)
     db_session.commit()
     return user
@@ -59,7 +55,7 @@ def sample_process(db_session):
         email_subject="Test Subject",
         email_body="Test Body",
         email_addendum="Test Addendum",
-        container="test_container"
+        container="test_container",
     )
     db_session.add(process)
     db_session.commit()
@@ -69,10 +65,7 @@ def sample_process(db_session):
 @pytest.fixture(scope="function")
 def sample_user_process(db_session, sample_user, sample_process):
     """Create sample user_process for testing"""
-    user_process = UserProcess(
-        user_id=sample_user.id,
-        process_id=sample_process.id
-    )
+    user_process = UserProcess(user_id=sample_user.id, process_id=sample_process.id)
     db_session.add(user_process)
     db_session.commit()
     return user_process
@@ -82,11 +75,13 @@ def sample_user_process(db_session, sample_user, sample_process):
 def mock_queue_message():
     """Mock Azure Functions QueueMessage"""
     message = Mock()
-    message.get_body.return_value.decode.return_value = json.dumps({
-        "report_id": "test_report_123",
-        "institution_id": 123,
-        "process_type": "test_process"
-    })
+    message.get_body.return_value.decode.return_value = json.dumps(
+        {
+            "report_id": "test_report_123",
+            "institution_id": 123,
+            "process_type": "test_process",
+        }
+    )
     return message
 
 
@@ -96,7 +91,7 @@ def mock_storage_service():
     mock = Mock()
     mock.download_blob_as_json.return_value = [
         {"column1": "value1", "column2": "value2"},
-        {"column1": "value3", "column2": "value4"}
+        {"column1": "value3", "column2": "value4"},
     ]
     return mock
 
@@ -106,7 +101,7 @@ def sample_report_data():
     """Sample report data for testing"""
     return [
         {"Item ID": "123", "Title": "Test Book", "Status": "Available"},
-        {"Item ID": "456", "Title": "Another Book", "Status": "Checked Out"}
+        {"Item ID": "456", "Title": "Another Book", "Status": "Checked Out"},
     ]
 
 
@@ -116,7 +111,7 @@ def temp_template_dir():
     with tempfile.TemporaryDirectory() as temp_dir:
         template_dir = Path(temp_dir) / "templates"
         template_dir.mkdir()
-        
+
         # Create test email template
         template_content = """
         <html>
@@ -129,7 +124,7 @@ def temp_template_dir():
         </html>
         """
         (template_dir / "email_template.html.j2").write_text(template_content.strip())
-        
+
         yield template_dir
 
 
@@ -137,9 +132,15 @@ def temp_template_dir():
 def setup_env_vars(monkeypatch):
     """Setup environment variables for testing"""
     monkeypatch.setenv("SQLALCHEMY_CONNECTION_STRING", "sqlite:///:memory:")
-    monkeypatch.setenv("AzureWebJobsStorage", "DefaultEndpointsProtocol=https;AccountName=test;AccountKey=testkey;EndpointSuffix=core.windows.net")
+    monkeypatch.setenv(
+        "AzureWebJobsStorage",
+        "DefaultEndpointsProtocol=https;AccountName=test;AccountKey=testkey;EndpointSuffix=core.windows.net",
+    )
     monkeypatch.setenv("NOTIFICATION_QUEUE", "test-queue")
-    monkeypatch.setenv("ACS_STORAGE_CONNECTION_STRING", "DefaultEndpointsProtocol=https;AccountName=acs;AccountKey=key;EndpointSuffix=core.windows.net")
+    monkeypatch.setenv(
+        "ACS_STORAGE_CONNECTION_STRING",
+        "DefaultEndpointsProtocol=https;AccountName=acs;AccountKey=key;EndpointSuffix=core.windows.net",
+    )
     monkeypatch.setenv("ACS_SENDER_QUEUE_NAME", "sender-queue")
     monkeypatch.setenv("ACS_SENDER_CONTAINER_NAME", "sender-container")
     monkeypatch.setenv("API_CLIENT_TIMEOUT", "90")
@@ -149,6 +150,7 @@ def setup_env_vars(monkeypatch):
 def reset_global_variables():
     """Reset global database variables between tests"""
     import alma_item_checks_notification_service.database as db_module
+
     db_module._db_engine = None
     db_module._session_maker = None
     yield
