@@ -88,7 +88,6 @@ data "azurerm_log_analytics_workspace" "existing" {
 data "azurerm_storage_account" "acs_email_sender" {
   name                = var.acs_email_sender_sa_name
   resource_group_name = var.acs_email_sender_sa_rg_name
-  use_azuread_auth    = true
 }
 
 resource "azurerm_application_insights" "main" {
