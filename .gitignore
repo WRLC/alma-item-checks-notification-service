@@ -38,6 +38,7 @@ env.bak/
 venv.bak/
 .env.secrets
 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

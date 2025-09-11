@@ -12,15 +12,15 @@ repos:
     hooks:
     -   id: ruff
         args: [--fix]
-        files: ^alma_item_checks_notifications_service/
+        files: ^alma_item_checks_notification_service/
     -   id: ruff-format
-        files: ^alma_item_checks_notifications_service/
+        files: ^alma_item_checks_notification_service/
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.1
     hooks:
     -   id: mypy
-        files: ^alma_item_checks_notifications_service/
+        files: ^alma_item_checks_notification_service/
 
 -   repo: https://github.com/PyCQA/bandit
     rev: 1.7.9
@@ -28,7 +28,7 @@ repos:
     -   id: bandit
         args: ["-c", "pyproject.toml"]
         exclude: ^tests/
-        files: ^alma_item_checks_notifications_service/
+        files: ^alma_item_checks_notification_service/
 
 -   repo: local
     hooks:
@@ -42,7 +42,7 @@ repos:
 
     -   id: pytest-cov
         name: pytest with coverage
-        entry: arch -arm64 poetry run pytest --cov=alma_item_checks_notifications_service --cov-fail-under=90
+        entry: arch -arm64 poetry run pytest --cov=alma_item_checks_notification_service --cov-fail-under=90
         language: system
         pass_filenames: false
         always_run: true
