@@ -34,7 +34,7 @@ env:
   TF_VAR_tf_shared_key: ${{ secrets.TF_SHARED_STATE_KEY }}
   TF_VAR_acs_email_sender_sa_name: ${{ secrets.ACS_EMAIL_SENDER_SA_NAME }}
   TF_VAR_acs_email_sender_sa_rg_name: ${{ secrets.ACS_EMAIL_SENDER_SA_RG_NAME }}
-  TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USER }}
+  TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USERNAME }}
   TF_VAR_mysql_admin_password: ${{ secrets.MYSQL_ADMIN_PASSWORD }}
   TF_WORKING_DIR: ./terraform
   PYTHON_VERSION: '3.12'
@@ -62,11 +62,6 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_wrapper: false
-
-      - name: Debug variables
-        run: |
-          echo "acs_email_sender_sa_name:${{ env.TF_VAR_acs_email_sender_sa_name }}" | sed 's/./& /g'
-          echo "acs_email_sender_sa_rg_name: ${{ env.TF_VAR_acs_email_sender_sa_rg_name }}" | sed 's/./& /g'
 
       - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
