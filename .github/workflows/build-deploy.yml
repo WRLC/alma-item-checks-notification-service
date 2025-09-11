@@ -28,11 +28,10 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
   ARM_USE_OIDC: true
-  ARM_USE_AZUREAD: true
-  TF_VAR_tf_shared_resource_group_name: ${{ secrets.TF_SHARED_RESOURCE_GROUP_NAME }}
-  TF_VAR_tf_shared_storage_account_name: ${{ secrets.TF_SHARED_STORAGE_ACCOUNT_NAME }}
-  TF_VAR_tf_shared_container_name: ${{ secrets.TF_SHARED_CONTAINER_NAME }}
-  TF_VAR_tf_shared_key: ${{ secrets.TF_SHARED_KEY }}
+  TF_VAR_tf_shared_resource_group_name: ${{ secrets.TF_SHARED_STATE_RESOURCE_GROUP_NAME }}
+  TF_VAR_tf_shared_storage_account_name: ${{ secrets.TF_SHARED_STATE_STORAGE_ACCOUNT_NAME }}
+  TF_VAR_tf_shared_container_name: ${{ secrets.TF_SHARED_STATE_CONTAINER_NAME }}
+  TF_VAR_tf_shared_key: ${{ secrets.TF_SHARED_STATE_KEY }}
   TF_VAR_acs_email_sender_sa_name: ${{ secrets.ACS_EMAIL_SENDER_SA_NAME }}
   TF_VAR_acs_email_sender_sa_rg_name: ${{ secrets.ACS_EMAIL_SENDER_SA_RG_NAME }}
   TF_VAR_mysql_admin_username: ${{ secrets.MYSQL_ADMIN_USER }}
