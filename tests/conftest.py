@@ -55,7 +55,6 @@ def sample_process(db_session):
         email_subject="Test Subject",
         email_body="Test Body",
         email_addendum="Test Addendum",
-        container="test_container",
     )
     db_session.add(process)
     db_session.commit()

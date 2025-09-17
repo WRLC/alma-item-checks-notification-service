@@ -210,7 +210,7 @@ class TestBpNotification:
         mock_message = Mock()
         mock_message.get_body.return_value.decode.return_value = json.dumps(
             {
-                "report_id": "integration_report",
+                "job_id": "integration_report",
                 "institution_id": 100,
                 "process_type": "integration_process",
             }
@@ -259,7 +259,6 @@ class TestBpNotification:
             name="service_process",
             email_subject="Service Test",
             email_body="Test body",
-            container="service_container",
         )
         db_session.add_all([user, process])
         db_session.commit()
@@ -293,7 +292,7 @@ class TestBpNotification:
         mock_message = Mock()
         mock_message.get_body.return_value.decode.return_value = json.dumps(
             {
-                "report_id": None,  # Missing field
+                "job_id": None,  # Missing field
                 "institution_id": 123,
                 "process_type": "nonexistent",
             }

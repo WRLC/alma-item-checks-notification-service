@@ -15,4 +15,3 @@ class Process(Base):
     email_subject = Column(String(255), nullable=False)
     email_body = Column(String(255), nullable=False)
     email_addendum = Column(String(255), nullable=True)
-    container = Column(String(255), nullable=False)

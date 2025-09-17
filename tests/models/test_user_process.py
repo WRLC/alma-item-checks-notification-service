@@ -36,7 +36,6 @@ class TestUserProcess:
             name="fk_test_process",
             email_subject="FK Test",
             email_body="FK Body",
-            container="fk_container",
         )
         db_session.add(user)
         db_session.add(process)
@@ -57,7 +56,6 @@ class TestUserProcess:
             name="composite_test_process",
             email_subject="Composite Test",
             email_body="Test Body",
-            container="composite_container",
         )
         db_session.add_all([user, process])
         db_session.commit()

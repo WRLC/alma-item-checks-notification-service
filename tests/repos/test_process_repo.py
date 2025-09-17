@@ -178,13 +178,11 @@ class TestProcessRepository:
             name="process1",
             email_subject="Subject 1",
             email_body="Body 1",
-            container="container1",
         )
         process2 = Process(
             name="process2",
             email_subject="Subject 2",
             email_body="Body 2",
-            container="container2",
         )
         db_session.add_all([process1, process2])
         db_session.commit()
