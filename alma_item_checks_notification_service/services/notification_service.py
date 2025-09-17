@@ -19,11 +19,11 @@ import pandas as pd
 from sqlalchemy.orm import Session
 from wrlc_azure_storage_service import StorageService  # type: ignore
 
-import alma_item_checks_notification_service.config as config
 from alma_item_checks_notification_service.config import (
     ACS_STORAGE_CONNECTION_STRING,
     ACS_SENDER_CONTAINER_NAME,
     ACS_SENDER_QUEUE_NAME,
+    REPORTS_CONTAINER,
 )
 from alma_item_checks_notification_service.models.process import Process
 from alma_item_checks_notification_service.services.process_service import (
@@ -65,11 +65,11 @@ class NotificationService:
         """Send an email notification"""
         message_data: dict[str, Any] = json.loads(self.msg.get_body().decode())
 
-        report_id: str | None = message_data["report_id"]
+        job_id: str | None = message_data["job_id"]
         institution_id: int | None = message_data["institution_id"]
         process_type: str | None = message_data["process_type"]
 
-        if not process_type or not institution_id or not report_id:
+        if not process_type or not institution_id or not job_id:
             logging.error(
                 "NotificationService.send_notification: message body missing required fields"
             )
@@ -86,8 +86,8 @@ class NotificationService:
 
         report: dict[str, Any] | list | None = (
             self.storage_service.download_blob_as_json(
-                container_name=getattr(config, str(process.container)),
-                blob_name=report_id + ".json",
+                container_name=REPORTS_CONTAINER,
+                blob_name=job_id + ".json",
             )
         )
 
@@ -116,12 +116,12 @@ class NotificationService:
 
         storage_service.upload_blob_data(
             container_name=ACS_SENDER_CONTAINER_NAME,
-            blob_name=report_id + ".json",
+            blob_name=job_id + ".json",
             data=email_json_content,
         )
 
         message_content: dict[str, str] = {
-            "blob_name": report_id + ".json",
+            "blob_name": job_id + ".json",
         }
 
         storage_service.send_queue_message(

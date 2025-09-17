@@ -11,6 +11,8 @@ NOTIFICATION_QUEUE = os.getenv(
     "NOTIFICATION_QUEUE", "notification-queue"
 )  # Triggers function
 
+REPORTS_CONTAINER = os.getenv("REPORTS_CONTAINER", "reports-container")
+
 ACS_STORAGE_CONNECTION_STRING: str | None = os.getenv("ACS_STORAGE_CONNECTION_STRING")
 ACS_SENDER_QUEUE_NAME: str = os.getenv("ACS_SENDER_QUEUE_NAME", "")
 ACS_SENDER_CONTAINER_NAME: str = os.getenv("ACS_SENDER_CONTAINER_NAME", "")

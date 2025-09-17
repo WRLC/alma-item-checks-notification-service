@@ -18,7 +18,7 @@ class TestNotificationService:
         self.mock_message = Mock()
         self.mock_message.get_body.return_value.decode.return_value = json.dumps(
             {
-                "report_id": "test_report",
+                "job_id": "test_report",
                 "institution_id": 123,
                 "process_type": "test_process",
             }
@@ -85,7 +85,7 @@ class TestNotificationService:
         """Test send_notification with missing required fields"""
         mock_message = Mock()
         mock_message.get_body.return_value.decode.return_value = json.dumps(
-            {"report_id": None, "institution_id": 123, "process_type": "test"}
+            {"job_id": None, "institution_id": 123, "process_type": "test"}
         )
 
         with patch(
@@ -141,57 +141,52 @@ class TestNotificationService:
 
             mock_blob_storage.download_blob_as_json.return_value = [{"Item": "Test"}]
 
-            # Mock config to have the container attribute
+            # Mock config for the test
+            service = NotificationService(self.mock_message)
+
+            # Mock successful jinja rendering
+            mock_template = Mock()
+            mock_template.render.return_value = "<html>test email</html>"
+            mock_jinja_env = Mock()
+            mock_jinja_env.get_template.return_value = mock_template
+            service.jinja_env = mock_jinja_env
+
+            # Mock the services
             with patch(
-                "alma_item_checks_notification_service.services.notification_service.config"
-            ) as mock_config:
-                setattr(mock_config, sample_process.container, sample_process.container)
-
-                service = NotificationService(self.mock_message)
-
-                # Mock successful jinja rendering
-                mock_template = Mock()
-                mock_template.render.return_value = "<html>test email</html>"
-                mock_jinja_env = Mock()
-                mock_jinja_env.get_template.return_value = mock_template
-                service.jinja_env = mock_jinja_env
-
-                # Mock the services
+                "alma_item_checks_notification_service.services.notification_service.ProcessService"
+            ) as mock_ps:
                 with patch(
-                    "alma_item_checks_notification_service.services.notification_service.ProcessService"
-                ) as mock_ps:
+                    "alma_item_checks_notification_service.services.notification_service.UserProcessService"
+                ) as mock_ups:
+                    mock_process_service = Mock()
+                    mock_process_service.get_process_by_name.return_value = (
+                        sample_process
+                    )
+                    mock_ps.return_value = mock_process_service
+
+                    mock_user_process_service = Mock()
+                    mock_user_process_service.get_user_emails_for_process.return_value = [
+                        sample_user.email
+                    ]
+                    mock_ups.return_value = mock_user_process_service
+
+                    # Mock pandas
                     with patch(
-                        "alma_item_checks_notification_service.services.notification_service.UserProcessService"
-                    ) as mock_ups:
-                        mock_process_service = Mock()
-                        mock_process_service.get_process_by_name.return_value = (
-                            sample_process
-                        )
-                        mock_ps.return_value = mock_process_service
+                        "alma_item_checks_notification_service.services.notification_service.pd"
+                    ) as mock_pd:
+                        mock_df = Mock()
+                        mock_df.empty = False
+                        mock_df.to_html.return_value = "<table>test data</table>"
+                        mock_df.style.set_caption.return_value = mock_df
+                        mock_pd.read_json.return_value = mock_df
 
-                        mock_user_process_service = Mock()
-                        mock_user_process_service.get_user_emails_for_process.return_value = [
-                            sample_user.email
-                        ]
-                        mock_ups.return_value = mock_user_process_service
+                        mock_session = Mock()
+                        service.send_notification(mock_session)
 
-                        # Mock pandas
-                        with patch(
-                            "alma_item_checks_notification_service.services.notification_service.pd"
-                        ) as mock_pd:
-                            mock_df = Mock()
-                            mock_df.empty = False
-                            mock_df.to_html.return_value = "<table>test data</table>"
-                            mock_df.style.set_caption.return_value = mock_df
-                            mock_pd.read_json.return_value = mock_df
-
-                            mock_session = Mock()
-                            service.send_notification(mock_session)
-
-                            # Verify the complete flow
-                            mock_blob_storage.download_blob_as_json.assert_called_once()
-                            mock_acs_storage.upload_blob_data.assert_called_once()
-                            mock_acs_storage.send_queue_message.assert_called_once()
+                        # Verify the complete flow
+                        mock_blob_storage.download_blob_as_json.assert_called_once()
+                        mock_acs_storage.upload_blob_data.assert_called_once()
+                        mock_acs_storage.send_queue_message.assert_called_once()
 
     def test_render_email_body_no_jinja_env(self):
         """Test render_email_body with no Jinja environment"""
