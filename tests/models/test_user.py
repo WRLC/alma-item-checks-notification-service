@@ -29,10 +29,10 @@ class TestUser:
         assert hasattr(user, "email")
         assert hasattr(user, "institution_id")
 
-    def test_user_email_unique_constraint(self, db_session):
-        """Test user email unique constraint"""
+    def test_user_composite_unique_constraint(self, db_session):
+        """Test user composite unique constraint on (email, institution_id)"""
         user1 = User(email="unique@example.com", institution_id=123)
-        user2 = User(email="unique@example.com", institution_id=456)
+        user2 = User(email="unique@example.com", institution_id=123)
 
         db_session.add(user1)
         db_session.commit()
@@ -41,14 +41,30 @@ class TestUser:
         with pytest.raises(Exception):  # Should raise integrity error
             db_session.commit()
 
-    def test_user_institution_id_unique_constraint(self, db_session):
-        """Test user institution_id unique constraint"""
+    def test_user_same_email_different_institutions_allowed(self, db_session):
+        """Test that same email can exist for different institutions"""
+        user1 = User(email="user@example.com", institution_id=123)
+        user2 = User(email="user@example.com", institution_id=456)
+
+        db_session.add(user1)
+        db_session.add(user2)
+        db_session.commit()
+
+        assert user1.id is not None
+        assert user2.id is not None
+        assert user1.email == user2.email
+        assert user1.institution_id != user2.institution_id
+
+    def test_user_same_institution_different_emails_allowed(self, db_session):
+        """Test that same institution can have different email users"""
         user1 = User(email="user1@example.com", institution_id=999)
         user2 = User(email="user2@example.com", institution_id=999)
 
         db_session.add(user1)
+        db_session.add(user2)
         db_session.commit()
 
-        db_session.add(user2)
-        with pytest.raises(Exception):  # Should raise integrity error
-            db_session.commit()
+        assert user1.id is not None
+        assert user2.id is not None
+        assert user1.email != user2.email
+        assert user1.institution_id == user2.institution_id
