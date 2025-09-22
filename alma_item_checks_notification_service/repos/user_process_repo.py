@@ -1,4 +1,5 @@
 """Repository for the UserProcess table"""
+
 import logging
 
 from sqlalchemy import Select
@@ -10,6 +11,7 @@ from alma_item_checks_notification_service.models.user_process import UserProces
 
 class UserProcessRepository:
     """Repository for the UserProcess table"""
+
     def __init__(self, session: Session):
         self.session = session
 
@@ -35,11 +37,15 @@ class UserProcessRepository:
             return user_ids
 
         except NoResultFound:
-            logging.error(f"UserProcessRepository.get_users_for_process: NoResultFound")
+            logging.error("UserProcessRepository.get_users_for_process: NoResultFound")
             return None
         except SQLAlchemyError as e:
-            logging.error(f"UserProcessRepository.get_users_for_process: SQLAlchemyError: {e}")
+            logging.error(
+                f"UserProcessRepository.get_users_for_process: SQLAlchemyError: {e}"
+            )
             return None
         except Exception as e:
-            logging.error(f"UserProcessRepository.get_users_for_process: Exception: {e}")
+            logging.error(
+                f"UserProcessRepository.get_users_for_process: Exception: {e}"
+            )
             return None

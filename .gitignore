@@ -36,11 +36,27 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env.secrets
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Linting and type checking
+.mypy_cache/
+.ruff_cache/
+
+# Distribution / packaging
+*.egg-info/
 
 # Azurite artifacts
 __blobstorage__
@@ -57,6 +73,7 @@ azurite-data
 *.sql
 
 CLAUDE.md
+.claude/
 
 # Terraform local development files
 **/.terraform/
