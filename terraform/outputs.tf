@@ -27,3 +27,13 @@ output "stage_db_user" {
   description = "The username for the stage database managed identity."
   value       = "${azurerm_linux_function_app.function_app.name}-stage"
 }
+
+output "python_version" {
+  description = "The Python version used for the Function App"
+  value       = azurerm_linux_function_app.function_app.site_config[0].application_stack[0].python_version
+}
+
+output "stage_slot_name" {
+  description = "The name of the app's staging deployment slot"
+  value       = azurerm_linux_function_app_slot.staging_slot.name
+}
